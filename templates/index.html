@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CoSend</title>
+    <style type="text/css" rel="stylesheet">
+        @import url(http://fonts.googleapis.com/css?family=Muli);
+
+        body {
+            margin:0;
+            padding:0;
+            font-family:helvetica, sans-serif;
+            background: #bbbbbb;
+        }
+        p {
+            line-height: 1.8;
+        }
+        a {
+            color:#12c064;
+            text-decoration:none;
+        }
+        a:hover {
+            color:#00a74f;
+        }
+        h1, h2, h3, h4, h5 , h6 { font-family: 'Muli', sans-serif; font-weight:normal; }
+        h1 {
+            border-bottom:1px solid #bbb;
+            padding:0 0 10px 0;
+            margin:10px 0 20px 0;
+        }
+        h2 {
+            margin:30px 0 20px;
+        }
+        ol {
+            line-height:1.5;
+        }
+        #header {
+            padding:10px 100px;
+            font-size:14px;
+            background:#12c064;
+            color:#fff;
+            border-bottom:4px solid #1cdf78;
+            overflow:auto;
+        }
+        #header .logo {
+            font-family: 'Muli', sans-serif;
+            float:left;
+            color:#f3f7cc;
+            font-size:20px;
+            margin-right:10%;
+        }
+        #header ul.menu {
+            list-style:none;
+            float:left;
+            margin:0;
+            padding:0;
+        }
+        #header ul.menu li {
+            float:left;
+            padding:4px 10px;
+        }
+        #header ul.menu li.selected a, #header ul.menu li.selected a:hover {
+            color:#1b6d32;
+            font-weight:bold;
+        }
+        #header a {
+            color:#f3f7cc;
+        }
+        #header a:hover {
+            color:#fff;
+        }
+        #content {
+            padding:30px 100px;
+        }
+        #boxdisplayvideo{
+            float: left;
+            margin: 10px;
+            height: 300px;
+            width: 350px;
+            background-color: rgba(0,0,0,.5);
+        }
+        #boxdisplayvideo a{
+            display: block;
+            text-align: center;
+            background-color: transparent;
+            width: 320px;
+        }
+        #boxdisplay{
+            float: left;
+            margin: 10px;
+            height: 100px;
+            width: 100px;
+        }
+        #boxdisplay a{
+            display: block;
+            text-align: center;
+            background-color: transparent;
+            width: 100px;
+        }
+        #boxdisplay img{
+            object-fit: cover;
+            border-radius: 5px;
+            width: 100px;
+            height: 100px;
+        }
+        #listdisplay {
+            float: left;
+            margin: 10px;
+            border-top: 20px;
+            align-content: center;
+            border-bottom: 20px;
+            height: 60px;
+            width: 350px;
+            background: rgba(0, 5, 9, .5);
+        }
+        #listdisplay a {
+            text-align: center;
+            width: 320px;
+            color: white;
+        }
+        #listcontainer{
+            clear: both;
+        }
+    </style>
+</head>
+<body>
+    <div id="header">
+        <span class="logo">Co..Send</span>
+            <ul class="menu">
+                <li {% if section == "index" %}class="selected"{% endif %}>
+                    <a href="{{ url_for('index') }}">Index</a>
+                </li>
+                <li {% if section == "video" %}class="selected"{% endif %}>
+                    <a href="{{ url_for('video_list') }}">Videos</a>
+                </li>
+                <li {% if section == "music" %} class="selected" {% endif %}>
+                    <a href="{{ url_for('music_list') }}">Audios</a>
+                </li>
+                <li {% if section == "document" %}class="selected"{% endif %}>
+                    <a href="{{ url_for('document_list') }}">Documents</a>
+                </li>
+                <li {% if section == "picture" %}class="selected"{% endif %}>
+                    <a href="{{ url_for('picture_list') }}">Picture</a>
+                </li>
+                <li {% if section == "compressed" %}class="selected"{% endif %}>
+                    <a href="{{ url_for('compressed_list') }}">Compressed</a>
+                </li>
+                <li {% if section == "application" %}class="selected"{% endif %}>
+                    <a href="{{ url_for('application_list') }}">Application</a>
+                </li>
+            </ul>
+    </div>
+    <div id="content">
+
+    {% if pictures %}
+        <div id="listcontainer">
+        <h2 id="header">Pictures</h2>
+        {% for picture in pictures %}
+        <div id="boxdisplay">
+            <a href="{{ picture|first }}">
+                <img src="{{ picture|first }}" alt="Sorry could not load image">
+            </a>
+        </div>
+        {% endfor %}
+        </div>
+    {% endif %}
+
+
+        {% if videos %}
+            <div id="listcontainer">
+        <h2 id="header">Videos</h2>
+    {% for video in videos %}
+        <div id="{% if section == "video" %}boxdisplayvideo{% else  %}listdisplay{% endif %}">
+            {% if section == "video" %}
+            <video width="350" height="240" controls>
+               <source src="{{ video|first }}" >
+             </video>
+            {% endif %}
+            <a href="{{ video|first}}"><p>{{ video|last|truncate(30) }}</p></a>
+        </div>
+        {% endfor %}
+            </div>
+    {% endif %}
+
+
+    {% if musics %}
+        <div id="listcontainer">
+        <h2 id="header">Audio</h2>
+        {% for music in musics %}
+        <div id="{% if section == "music" %}boxdixplay{% else  %}listdisplay{% endif %}">
+            {% if section == "music" %}
+            <audio controls>
+                <source src="{{ music|first }}" >
+            </audio>
+            {% endif %}
+            <a href="{{ music|first }}"> {{ music|last|truncate(30) }}</a>
+        </div>
+        {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if documents %}
+    <div id="listcontainer">
+        <h2 id="header">Documents</h2>
+        {% for document in documents %}
+        <div id="listdisplay">
+            <a href="{{ document|first }}"> {{ document|last|truncate(30) }}</a>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if applications %}
+    <div id="listcontainer">
+        <h2 id="header">Documents</h2>
+        {% for application in applications %}
+        <div id="listdisplay">
+            <a href="{{ application|first }}"> {{ application|last|truncate(30) }}</a>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if compressed %}
+    <div id="listcontainer">
+        <h2 id="header">Compressed</h2>
+        {% for file in compressed %}
+        <div id="listdisplay">
+            <a href="{{ file|first }}"> {{ file|last|truncate(30) }}</a>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    </div>
+    <div id="listcontainer" class="footer">
+        <div id="header"> <h2 style="text-align: center;">&copy JoeTiB Incorporation & Paddy Pyker</h2></div>
+    </div>
+
+</body>
+</html>
